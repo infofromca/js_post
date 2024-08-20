@@ -1,8 +1,12 @@
 ﻿@page "/counter"
 
 @inject IJSRuntime JS
-
+@*THIS ALSO NOT WORK <EditForm EditContext="editContext" OnValidSubmit="SubmitFormForFreeAsync" id="payment-form" class="payment-form" FormName="payment-form"> *@
 <form action="@actionUrl" method="post" id="payment-form" name="payment-form" class="payment-form">
+
+    <input name="__RequestVerificationToken" type="hidden" value="CfDJ8H6QG-ukGuVAusEYSThtsvTZz2ajUbBpzEWEk-FYYWmGfD2LHBb-Kw8gKR-_bCNlF7xb9Vg0Hxmm6ea_UODGoiwzGz8pJX63-Vextbo6u3aLuJEms4XZm07Quc1p5k1su00cFq94swISR4ZeelVA3bRNfNhls841CEdOYOD0VnoEA7vX9pUCHvEg_3K13RnecQ">
+    <input type="email" id="email" name="email" class="payment-form-email" />
+    <label for="email">tHERE WERE __RequestVerificationToken , email or not, the same result.</label>
 
     <button class="btn btn-primary">Clicking here seems it did not trigger any http post of fetch of JS</button>
 </form>
