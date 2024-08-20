@@ -1,16 +1,24 @@
 ﻿@page "/counter"
 
-<h1>Counter</h1>
+@inject IJSRuntime JS
 
-<p role="status">Current count: @currentCount</p>
+<form action="@actionUrl" method="post" id="payment-form" name="payment-form" class="payment-form">
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+    <button class="btn btn-primary">Clicking here seems it did not trigger any http post of fetch of JS</button>
+</form>
 
 @code {
-    private int currentCount = 0;
+    string postUrlForJS = string.Empty;
+    const string actionUrl  = @"https://localhost:44353/api/checkout/formfree/cartid123";
 
-    private void IncrementCount()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        currentCount++;
+        if (firstRender)
+        {            
+            postUrlForJS = @"https://localhost:44353/api/payment-params/Stripe/cartid123?paymentIntent=PAYMENT_INTENT";
+            ExampleJsInterop _ExampleJsInterop = new ExampleJsInterop(JS);
+            await _ExampleJsInterop.attachTestButtonClick(postUrlForJS, ".btn");//not good!!!
+            await _ExampleJsInterop.Prompt("loaded js file.");//good
+        }
     }
 }

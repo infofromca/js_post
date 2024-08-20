@@ -33,5 +33,11 @@ namespace MyApp.Shared
                 await module.DisposeAsync();
             }
         }
+
+        public async ValueTask<string> attachTestButtonClick(string url, string button)
+        {
+            var module = await moduleTask.Value;
+            return await module.InvokeAsync<string>("attachTestButtonClick", url, button);
+        }
     }
 }
