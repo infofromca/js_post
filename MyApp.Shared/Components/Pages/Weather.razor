@@ -1,63 +1,28 @@
 ﻿@page "/weather"
 
-<PageTitle>Weather</PageTitle>
+@inject IJSRuntime JS
+@*THIS ALSO NOT WORK <EditForm EditContext="editContext" OnValidSubmit="SubmitFormForFreeAsync" id="payment-form" class="payment-form" FormName="payment-form"> *@
+<form action="@actionUrl" method="post" id="payment-form" name="payment-form" class="payment-form">
 
-<h1>Weather</h1>
+    <input name="__RequestVerificationToken" type="hidden" value="CfDJ8H6QG-ukGuVAusEYSThtsvTZz2ajUbBpzEWEk-FYYWmGfD2LHBb-Kw8gKR-_bCNlF7xb9Vg0Hxmm6ea_UODGoiwzGz8pJX63-Vextbo6u3aLuJEms4XZm07Quc1p5k1su00cFq94swISR4ZeelVA3bRNfNhls841CEdOYOD0VnoEA7vX9pUCHvEg_3K13RnecQ">
+    <input type="email" id="email" name="email" class="payment-form-email" />
+    <label for="email">THERE WERE __RequestVerificationToken , email or not, the same result.</label>
 
-<p>This component demonstrates showing data.</p>
-
-@if (forecasts == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
-            {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    <button class="btn btn-primary">Clicking here seems it did not trigger any http post of fetch of JS</button>
+</form>
 
 @code {
-    private WeatherForecast[]? forecasts;
+    string postUrlForJS = string.Empty;
+    const string actionUrl = @"https://localhost:44353/api/checkout/formfree/cartid123";
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
-
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
-    }
-
-    private class WeatherForecast
-    {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        if (firstRender)
+        {            
+            postUrlForJS = @"https://localhost:44353/api/payment-params/Stripe/cartid123?paymentIntent=PAYMENT_INTENT";
+            ExampleJsInterop _ExampleJsInterop = new ExampleJsInterop(JS);
+            await _ExampleJsInterop.attachPostButtonClick(postUrlForJS, ".btn");//not good!!!
+            await _ExampleJsInterop.Prompt("loaded js file.");//good
+        }
     }
 }

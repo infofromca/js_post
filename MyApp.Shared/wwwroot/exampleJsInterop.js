@@ -4,7 +4,33 @@
 export function showPrompt(message) {
   return prompt(message, 'Type anything here');
 }
-
+export function attachPostButtonClick(url, buttonSelector) {
+    Array.from(document.querySelectorAll(buttonSelector)).forEach((button) => {
+        button.addEventListener('click', async (event) => {
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append('name', 'John Doe');
+            formData.append('email', 'john.doe@example.com');
+            formData.append('message', 'Hello, this is a message!');
+            submitFormData(url, formData);
+        });
+    });
+}
+function submitFormData(url, formData) {
+    fetch(url, {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response from the server
+            console.log(data);
+        })
+        .catch(error => {
+            // Handle any errors
+            console.error(error);
+        });
+}
 export function attachTestButtonClick(url, buttonSelector) {
     Array.from(document.querySelectorAll(buttonSelector)).forEach((button) => {
         button.addEventListener('click', async (event) => {
