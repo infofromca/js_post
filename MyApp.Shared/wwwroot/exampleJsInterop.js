@@ -17,19 +17,20 @@ export function attachPostButtonClick(url, buttonSelector) {
     });
 }
 function submitFormData(url, formData) {
-    fetch(url, {
+   return fetch(url, {
         method: 'POST',
         body: formData
     })
         .then(response => response.json())
-        .then(data => {
-            // Handle the response from the server
-            console.log(data);
-        })
-        .catch(error => {
-            // Handle any errors
-            console.error(error);
-        });
+        //.then(data => {
+        //    // Handle the response from the server
+        //    console.log(data);
+        //})
+        //.catch(error => {
+        //    // Handle any errors
+        //    console.error(error);
+        //})
+        ;
 }
 export function attachTestButtonClick(url, buttonSelector) {
     Array.from(document.querySelectorAll(buttonSelector)).forEach((button) => {
