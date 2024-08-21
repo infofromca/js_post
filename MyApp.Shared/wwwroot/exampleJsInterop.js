@@ -12,7 +12,7 @@ export function attachPostButtonClick(url, buttonSelector) {
             formData.append('name', 'John Doe');
             formData.append('email', 'john.doe@example.com');
             formData.append('message', 'Hello, this is a message!');
-            submitFormData(url, formData);
+            await submitFormData(url, formData);
         });
     });
 }
